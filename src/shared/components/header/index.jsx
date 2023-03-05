@@ -75,7 +75,7 @@ function Header() {
   };
 
   // if user switches the wallet then it will update accordingly
-  window.ethereum.on('accountsChanged', connectWalletHandler);
+  // window.ethereum.on('accountsChanged', connectWalletHandler);
 
   useEffect(() => {
     setUserData({

@@ -1,0 +1,66 @@
+@import '../../styles';
+.dashboardContainer{
+  max-width: 1368px;
+  margin: auto;
+
+  .details{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 24px;
+    .etherImg{
+      width: 600px;
+      height: fit-content;
+      border-radius: 5px;
+
+      &:hover{
+        transition: 1s;
+        transform: scale(1.02);
+      }
+    }
+  }
+
+  .transactionForm{
+    width: 500px;
+    .submit{
+      width: 100%;
+    }
+  }
+
+  @include lessThan(xl){
+    .details{
+      .etherImg{
+        width: 500px;
+      }
+    }
+    .transactionForm{
+      width: 450px;
+    }
+  }
+
+  @include lessThan(lg){
+    .details{
+      .etherImg{
+        width: 360px;
+      }
+    }
+    .transactionForm{
+      width: 360px;
+    }
+  }
+
+  @include lessThan(md){
+    .details{
+      flex-direction: column;
+      .etherImg{
+        width: 100%;
+      }
+    }
+    .transactionForm{
+      width: 100%;
+      .submit{
+        width: 100%;
+      }
+    }
+  }
+}
