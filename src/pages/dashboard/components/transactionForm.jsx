@@ -61,7 +61,7 @@ function TransactionForm() {
       const provider = new ethers.providers.JsonRpcProvider(
         'https://goerli.infura.io/v3/cc75fe1364f24987a12955bf51c49a73'
       );
-      const minedTx = await provider.getTransaction(tx);
+      await provider.getTransaction(tx);
 
       setLoader(false);
       success();
