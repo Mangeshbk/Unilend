@@ -1,0 +1,58 @@
+@import '../../../styles';
+
+.header-container{
+  height: 72px;
+  position: sticky;
+  box-shadow: 0 3px 6px rgb(232, 223, 223);
+  display: flex;
+  align-items: center;
+  .header{
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 1368px;
+    margin: auto;
+
+    .logoIcon{
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      .title{
+        margin: 0;
+      }
+    }
+    
+    .balanceCard{
+      display: flex;
+      gap: 8px;
+      .tag{
+        width: fit-content;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        font-size: 18px;
+        @include lessThan(sm){
+          
+        }
+      }
+
+    }
+
+    @include lessThan(sm){
+      padding: 16px;
+      .title{
+        display: none;
+      }
+      .balanceCard{
+        .tag{
+          width: fit-content;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+      }
+    }
+  }
+}
