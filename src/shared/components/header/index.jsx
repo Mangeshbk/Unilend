@@ -13,6 +13,9 @@ function Header() {
     userAddress: '',
   });
 
+  // sessionStorage.setItem('userAddress', '');
+  // sessionStorage.setItem('userBalance', '');
+
   const [messageApi, contextHolder] = message.useMessage();
   const success = () => {
     messageApi.open({
@@ -38,6 +41,7 @@ function Header() {
           method: 'eth_getBalance',
           params: [account[0], 'latest'],
         });
+        // sessionStorage.clear();
         sessionStorage.setItem('userAddress', account[0]);
         sessionStorage.setItem(
           'userBalance',

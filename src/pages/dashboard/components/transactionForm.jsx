@@ -1,6 +1,6 @@
-import { Button, Form, Input, Typography } from 'antd';
-import { ethers, providers } from 'ethers';
-import React, { useEffect } from 'react';
+import { Button, Form, Input, Typography, message } from 'antd';
+import { ethers } from 'ethers';
+import React, { useState } from 'react';
 // import { useSelector } from 'react-redux';
 
 const { Title } = Typography;
@@ -9,18 +9,7 @@ const MyFormItemContext = React.createContext([]);
 function toArr(str) {
   return Array.isArray(str) ? str : [str];
 }
-// const MyFormItemGroup = ({ prefix, children }) => {
-//   const prefixPath = React.useContext(MyFormItemContext);
-//   const concatPath = React.useMemo(
-//     () => [...prefixPath, ...toArr(prefix)],
-//     [prefixPath, prefix]
-//   );
-//   return (
-//     <MyFormItemContext.Provider value={concatPath}>
-//       {children}
-//     </MyFormItemContext.Provider>
-//   );
-// };
+
 const MyFormItem = ({ name, ...props }) => {
   const prefixPath = React.useContext(MyFormItemContext);
   const concatName =
@@ -30,11 +19,33 @@ const MyFormItem = ({ name, ...props }) => {
 
 function TransactionForm() {
   // const { address } = useSelector((state) => state?.wallet);
+  const [form] = Form.useForm();
+  const [loader, setLoader] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
+  const throwWarning = () => {
+    messageApi.open({
+      type: 'warning',
+      content: 'Please connect to the wallet',
+    });
+  };
+  const success = () => {
+    messageApi.open({
+      type: 'success',
+      content: 'Transaction is successful',
+    });
+  };
+
+  const emptyFormError = () => {
+    messageApi.open({
+      type: 'warning',
+      content: 'Please fill the required field',
+    });
+  };
 
   const makePayment = async (data) => {
     const params = [
       {
-        from: 'address',
+        from: sessionStorage.getItem('userAddress'),
         to: data['receiver wallet'],
         gasLimit: Number(210000).toString(16),
         value: Number(Number(data.amount) * 10 ** 18).toString(16),
@@ -42,36 +53,44 @@ function TransactionForm() {
     ];
 
     try {
-      // set load true;
+      setLoader(true);
       const tx = await window.ethereum.request({
         method: 'eth_sendTransaction',
         params,
       });
-      console.log('TX', tx);
       const provider = new ethers.providers.JsonRpcProvider(
         'https://goerli.infura.io/v3/cc75fe1364f24987a12955bf51c49a73'
       );
       const minedTx = await provider.getTransaction(tx);
-      // const minedTx = await tx.wait(); // show waiting till transaction completes;
-      console.log('MIN_TX', minedTx);
-      // setLoading false;
-      // close modal
-      //
+
+      setLoader(false);
+      success();
     } catch (error) {
       console.log('ERROR', error);
     }
   };
 
   const onFromSubmit = (value) => {
-    console.log(value);
-    makePayment(value);
-    // do the transactions
-    // close the modal
+    if (sessionStorage.getItem('userAddress') === '') {
+      throwWarning();
+    }
+    if (value['receiver wallet'] !== '' && value.amount !== '') {
+      makePayment(value);
+      form.resetFields();
+    } else {
+      emptyFormError();
+    }
   };
   return (
     <div className='transactionForm'>
+      {contextHolder}
       <Title level={4}>Send your Ethereum</Title>
-      <Form name='form_item_path' layout='vertical' onFinish={onFromSubmit}>
+      <Form
+        name='form_item_path'
+        layout='vertical'
+        onFinish={onFromSubmit}
+        form={form}
+      >
         <MyFormItem
           name='receiver wallet'
           label='Receiver Wallet'
@@ -84,7 +103,12 @@ function TransactionForm() {
           <Input />
         </MyFormItem>
 
-        <Button className='submit' type='primary' htmlType='submit'>
+        <Button
+          loading={loader}
+          className='submit'
+          type='primary'
+          htmlType='submit'
+        >
           Submit
         </Button>
       </Form>

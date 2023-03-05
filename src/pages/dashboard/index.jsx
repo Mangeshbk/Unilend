@@ -7,13 +7,13 @@ import etherJsImg from '../../assets/images/etherJs.webp';
 
 const { Text, Title } = Typography;
 function Dashboard() {
-  const [messageApi, contextHolder] = message.useMessage();
-  const throwWarning = () => {
-    messageApi.open({
-      type: 'warning',
-      content: 'Please connect to the wallet',
-    });
-  };
+  // const [messageApi, contextHolder] = message.useMessage();
+  // const throwWarning = () => {
+  //   messageApi.open({
+  //     type: 'warning',
+  //     content: 'Please connect to the wallet',
+  //   });
+  // };
 
   useEffect(() => {
     // const provider = new ethers.providers.EtherscanProvider(api);
