@@ -9,11 +9,11 @@ import { walletActions } from '../store/reducer';
 const { Title } = Typography;
 
 function Header() {
-  const [connectStatus, setConnectStatus] = useState('disconnected');
-  const [errorMessage, setErrorMessage] = useState('');
-
   const { balance } = useSelector((state) => state?.wallet);
   const { address } = useSelector((state) => state?.wallet);
+  // const { isConnected } = useSelector((state) => state?.wallet);
+  const [connectStatus, setConnectStatus] = useState('disconnected');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const [messageApi, contextHolder] = message.useMessage();
   const success = () => {

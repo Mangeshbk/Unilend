@@ -40,6 +40,9 @@
       font-weight: bold;
       font-size: 18px;
     }
+    .tableList{
+      min-width: 360px;
+    }
   }
 
   @include lessThan(md){
