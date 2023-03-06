@@ -248,6 +248,7 @@ function TransactionHistory() {
   };
   useEffect(() => {
     getHistory();
+    // eslint-disable-next-line
   }, [address]);
 
   return (
