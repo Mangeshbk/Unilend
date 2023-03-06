@@ -168,65 +168,9 @@ function TransactionHistory() {
       functionName: '',
     },
   ];
-  /*
+
   const [historyData, setHistoryData] = useState(dummyData);
 
-  const getHistory = async () => {
-    // const res = await axios.get('https://api-goerli.etherscan.io/api', {
-    //   module: 'account',
-    //   action: 'txlist',
-    //   address: sessionStorage.getItem('userAddress'),
-    //   startblock: 0,
-    //   endblock: 99999999,
-    //   page: 1,
-    //   offset: 10,
-    //   sort: 'asc',
-    //   apikey: 'CS46J2QGS74K34RPFSFKMMP74W5QIU3HGV',
-    // });
-
-    // axios({
-    //   url: 'https://api-goerli.etherscan.io/api',
-    //   method: 'get',
-    //   headers: {
-    //     module: 'account',
-    //     action: 'txlist',
-    //     address: sessionStorage.getItem('userAddress'),
-    //     startblock: 0,
-    //     endblock: 99999999,
-    //     page: 1,
-    //     offset: 10,
-    //     sort: 'asc',
-    //     apikey: 'CS46J2QGS74K34RPFSFKMMP74W5QIU3HGV',
-    //     'Content-Type': 'application/json',
-    //   },
-    // })
-    //   .then((response) => {
-    //     console.log(response);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-
-    // console.log(res);
-
-    fetch(
-      'https://api-goerli.etherscan.io/api?module=account&action=txlist&address=0xD5b26AC46d2F43F4d82889f4C7BBc975564859e3&startblock=0&endblock=99999999&apikey=CS46J2QGS74K34RPFSFKMMP74W5QIU3HGV'
-    )
-      .then((res) => console.log(res))
-      .catch((error) => console.log(error));
-  };
-
-  useEffect(() => {
-    getHistory();
-    // const provider = new ethers.providers.EtherscanProvider(api);
-    // const provider = new ethers.providers.JsonRpcProvider(
-    //   'https://goerli.infura.io/v3/cc75fe1364f24987a12955bf51c49a73'
-    // );
-    // provider
-    //   .getTransactionCount('address')
-    //   .then((res) => console.log('COUNT', res));
-  }, []);
-*/
   const getAmount = (value) => {
     return Number(value) / 10 ** 18;
   };
@@ -251,6 +195,61 @@ function TransactionHistory() {
 
   const heading = [{ address: 'Address', time: 'Time', amount: 'Amount' }];
 
+  const getHistory = async () => {
+    const res = await axios.get('https://api-goerli.etherscan.io/api', {
+      module: 'account',
+      action: 'txlist',
+      address: address,
+      startblock: 0,
+      endblock: 99999999,
+      // page: 1,
+      // offset: 10,
+      // sort: 'asc',
+      apikey: 'CS46J2QGS74K34RPFSFKMMP74W5QIU3HGV',
+    });
+
+    console.log(res);
+    // setHistoryData(res.data);
+
+    // axios({
+    //   url: 'https://api-goerli.etherscan.io/api',
+    //   method: 'get',
+    //   headers: {
+    //     module: 'account',
+    //     action: 'txlist',
+    //     address: address,
+    //     startblock: 0,
+    //     endblock: 99999999,
+    //     page: 1,
+    //     offset: 10,
+    //     sort: 'asc',
+    //     apikey: 'CS46J2QGS74K34RPFSFKMMP74W5QIU3HGV',
+    //     'Content-Type': 'application/json',
+    //   },
+    // })
+    //   .then((response) => {
+    //     console.log(response);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+
+    // fetch(
+    //   'https://api-goerli.etherscan.io/api?module=account&action=txlist&address=0xD5b26AC46d2F43F4d82889f4C7BBc975564859e3&apikey=CS46J2QGS74K34RPFSFKMMP74W5QIU3HGV',
+    //   {
+    //     headers: {
+    //       Accept: 'application/json',
+    //       'Content-Type': 'application/json',
+    //     },
+    //   }
+    // )
+    //   .then((res) => console.log(res))
+    //   .catch((error) => console.log(error));
+  };
+  useEffect(() => {
+    getHistory();
+  }, [address]);
+
   return (
     <div className='transactionContainer'>
       <Title level={4}>Transaction History</Title>
@@ -271,7 +270,7 @@ function TransactionHistory() {
           />
           <List
             itemLayout='horizontal'
-            dataSource={dummyData}
+            dataSource={historyData}
             renderItem={(item, index) => (
               <List.Item>
                 <Text className='historyAmount'>
