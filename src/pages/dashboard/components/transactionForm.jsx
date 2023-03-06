@@ -1,7 +1,7 @@
 import { Button, Form, Input, Typography, message } from 'antd';
 import { ethers } from 'ethers';
 import React, { useState } from 'react';
-// import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 const { Title } = Typography;
 
@@ -18,7 +18,7 @@ const MyFormItem = ({ name, ...props }) => {
 };
 
 function TransactionForm() {
-  // const { address } = useSelector((state) => state?.wallet);
+  const { address } = useSelector((state) => state?.wallet);
   const [form] = Form.useForm();
   const [loader, setLoader] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
@@ -45,7 +45,7 @@ function TransactionForm() {
   const makePayment = async (data) => {
     const params = [
       {
-        from: sessionStorage.getItem('userAddress'),
+        from: address,
         to: data['receiver wallet'],
         gasLimit: Number(210000).toString(16),
         value: Number(Number(data.amount) * 10 ** 18).toString(16),
@@ -71,7 +71,7 @@ function TransactionForm() {
   };
 
   const onFromSubmit = (value) => {
-    if (sessionStorage.getItem('userAddress') === '') {
+    if (address === '') {
       throwWarning();
     }
     if (value['receiver wallet'] !== '' && value.amount !== '') {
@@ -91,12 +91,7 @@ function TransactionForm() {
         onFinish={onFromSubmit}
         form={form}
       >
-        <MyFormItem
-          name='receiver wallet'
-          label='Receiver Wallet'
-          // validateStatus='error'
-          // help='Should be combination of numbers & alphabets'
-        >
+        <MyFormItem name='receiver wallet' label='Receiver Wallet'>
           <Input />
         </MyFormItem>
         <MyFormItem name='amount' label='Amount'>

@@ -3,6 +3,9 @@ import Logo from '../../icons/Logo';
 import { Button, message, Tag, Typography } from 'antd';
 import { ethers } from 'ethers';
 import './index.scss';
+import { useSelector } from 'react-redux';
+import { dispatch } from '../../../rootStore/store';
+import { walletActions } from '../store/reducer';
 const { Title } = Typography;
 
 function Header() {
@@ -12,6 +15,9 @@ function Header() {
     userBalance: '',
     userAddress: '',
   });
+
+  const { balance } = useSelector((state) => state?.wallet);
+  const { address } = useSelector((state) => state?.wallet);
 
   // sessionStorage.setItem('userAddress', '');
   // sessionStorage.setItem('userBalance', '');
@@ -42,18 +48,21 @@ function Header() {
           params: [account[0], 'latest'],
         });
         // sessionStorage.clear();
-        sessionStorage.setItem('userAddress', account[0]);
-        sessionStorage.setItem(
-          'userBalance',
-          ethers.utils.formatEther(balance)
-        );
+        // sessionStorage.setItem('userAddress', account[0]);
+        // sessionStorage.setItem(
+        //   'userBalance',
+        //   ethers.utils.formatEther(balance)
+        // );
+        dispatch(walletActions.setAddress(account[0]));
+        dispatch(walletActions.setBalance(ethers.utils.formatEther(balance)));
+        dispatch(walletActions.setIsConnected('connected'));
         setUserData({
           userAddress: account[0],
           userBalance: ethers.utils.formatEther(balance),
         });
         success();
         setConnectStatus('connected');
-        sessionStorage.setItem('isConnected', 'connected');
+        // sessionStorage.setItem('isConnected', 'connected');
       } catch (error) {
         throwError();
         setConnectStatus('disconnected');
@@ -101,10 +110,10 @@ function Header() {
         {connectStatus === 'connected' ? (
           <div className='balanceCard'>
             <Tag className='tag' color='blue'>
-              {Number(userData?.userBalance).toFixed(4)} ETH
+              {Number(balance).toFixed(4)} ETH
             </Tag>
             <Tag className='tag' color='blue'>
-              {getShortAddress(userData?.userAddress)}
+              {getShortAddress(address)}
             </Tag>
           </div>
         ) : (
