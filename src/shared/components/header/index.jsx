@@ -29,6 +29,13 @@ function Header() {
     });
   };
 
+  const metaMaskError = () => {
+    messageApi.open({
+      type: 'error',
+      content: 'MetaMask is not detected',
+    });
+  };
+
   const connectWalletHandler = async () => {
     if (window.ethereum) {
       setConnectStatus('connecting');
@@ -54,6 +61,7 @@ function Header() {
       }
     } else {
       setErrorMessage('Meta Mask not detected');
+      metaMaskError();
     }
   };
 

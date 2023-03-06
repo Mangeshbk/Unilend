@@ -169,7 +169,7 @@ function TransactionHistory() {
     },
   ];
 
-  const [historyData, setHistoryData] = useState(dummyData);
+  const [historyData] = useState(dummyData);
 
   const getAmount = (value) => {
     return Number(value) / 10 ** 18;
