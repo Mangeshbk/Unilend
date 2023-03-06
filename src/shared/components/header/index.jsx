@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Logo from '../../icons/Logo';
 import { Button, message, Tag, Typography } from 'antd';
 import { ethers } from 'ethers';
@@ -11,16 +11,9 @@ const { Title } = Typography;
 function Header() {
   const [connectStatus, setConnectStatus] = useState('disconnected');
   const [errorMessage, setErrorMessage] = useState('');
-  const [userData, setUserData] = useState({
-    userBalance: '',
-    userAddress: '',
-  });
 
   const { balance } = useSelector((state) => state?.wallet);
   const { address } = useSelector((state) => state?.wallet);
-
-  // sessionStorage.setItem('userAddress', '');
-  // sessionStorage.setItem('userBalance', '');
 
   const [messageApi, contextHolder] = message.useMessage();
   const success = () => {
@@ -47,22 +40,13 @@ function Header() {
           method: 'eth_getBalance',
           params: [account[0], 'latest'],
         });
-        // sessionStorage.clear();
-        // sessionStorage.setItem('userAddress', account[0]);
-        // sessionStorage.setItem(
-        //   'userBalance',
-        //   ethers.utils.formatEther(balance)
-        // );
+
         dispatch(walletActions.setAddress(account[0]));
         dispatch(walletActions.setBalance(ethers.utils.formatEther(balance)));
         dispatch(walletActions.setIsConnected('connected'));
-        setUserData({
-          userAddress: account[0],
-          userBalance: ethers.utils.formatEther(balance),
-        });
+
         success();
         setConnectStatus('connected');
-        // sessionStorage.setItem('isConnected', 'connected');
       } catch (error) {
         throwError();
         setConnectStatus('disconnected');
@@ -83,20 +67,6 @@ function Header() {
     }
   };
 
-  const getSessionData = (data) => {
-    return sessionStorage.getItem(data);
-  };
-
-  // if user switches the wallet then it will update accordingly
-  // window.ethereum.on('accountsChanged', connectWalletHandler);
-
-  useEffect(() => {
-    setUserData({
-      userAddress: getSessionData('userAddress'),
-      userBalance: getSessionData('userBalance'),
-    });
-    setConnectStatus(getSessionData('isConnected') || 'disconnected');
-  }, []);
   return (
     <div className='header-container'>
       <div className='header'>
